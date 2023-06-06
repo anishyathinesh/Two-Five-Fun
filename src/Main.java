@@ -65,7 +65,7 @@ public class Main {
                 }
                 System.out.println( "MEAN RESULT: " + sum / (double) data.size());
             case "median":
-                quickSort(data, 0, data.size());
+                quickSort(data, 0, data.size()-1);
                 Double ans = 0.0;
                 if (data.size() % 2 == 0) {
                     Double r = data.get(data.size() / 2);
@@ -75,6 +75,22 @@ public class Main {
                     ans = data.get(data.size() / 2);
                 }
                 System.out.println( "MEDIAN RESULT: " + ans);
+
+            case "mode":
+                HashMap<Double, Integer> map = new HashMap<>();
+                for (Double dig : data) {
+                    if (map.containsKey(dig)) {
+                        map.put(dig, map.get(dig)+1);
+                    } else {
+                        map.put(dig, 1);
+                    }
+                }
+                ArrayList<Double> modes = new ArrayList<>();
+                int highest = 0;
+                for (Double key : map.keySet()) {
+                    //TODO
+
+                }
         }
     }
     public static void main(String[] args) {
