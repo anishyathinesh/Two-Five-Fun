@@ -1,6 +1,14 @@
+import java.text.DecimalFormat;
 import java.util.*;
 public class Main {
-    private static Scanner in;
+
+    private static DecimalFormat df;
+
+    public Main() {
+        df = new DecimalFormat("#.####");
+        System.out.println(df.format(2.4564564));
+    }
+
 
     public static void printMenu() {
         System.out.println();
@@ -14,6 +22,7 @@ public class Main {
         System.out.println("Unit 1 |");
         System.out.println("_______");
         System.out.println("> 1.1 - measures of location (mean/median/mode)");
+        System.out.println("> 1.2 - measures of variability (standard deviation/variance)");
 
         System.out.println();
         System.out.println("type tool # and press [ENTER]: ");
@@ -56,16 +65,17 @@ public class Main {
             quickSort(data, pi + 1, high);
         }
     }
-    public static void goMOL(String measure, ArrayList<Double> data) {
+    public static Double goMOL(String measure, ArrayList<Double> data) {
         switch (measure) {
-            case "mean":
+            case "mean" -> {
                 int sum = 0;
                 for (Double i : data) {
                     sum += i;
                 }
-                System.out.println( "MEAN RESULT: " + sum / (double) data.size());
-            case "median":
-                quickSort(data, 0, data.size()-1);
+                return sum / (double) data.size();
+            }
+            case "median" -> {
+                quickSort(data, 0, data.size() - 1);
                 Double ans = 0.0;
                 if (data.size() % 2 == 0) {
                     Double r = data.get(data.size() / 2);
@@ -74,13 +84,13 @@ public class Main {
                 } else {
                     ans = data.get(data.size() / 2);
                 }
-                System.out.println( "MEDIAN RESULT: " + ans);
-
-            case "mode":
+                return ans;
+            }
+            case "mode" -> {
                 HashMap<Double, Integer> map = new HashMap<>();
                 for (Double dig : data) {
                     if (map.containsKey(dig)) {
-                        map.put(dig, map.get(dig)+1);
+                        map.put(dig, map.get(dig) + 1);
                     } else {
                         map.put(dig, 1);
                     }
@@ -97,10 +107,31 @@ public class Main {
                     }
                     System.out.println("MODE RESULT: " + modes);
                 }
+            }
+        }
+        return null;
+    }
 
+    public static void goMOV(String measure, ArrayList<Double> data) {
+        ArrayList<Double> calcList = new ArrayList<>();
+        Double mean = goMOL("mean", data);
+        for (Double dig : data) {
+            calcList.add(dig - mean);
+            calcList.set(calcList.size()-1, Math.pow(calcList.get(calcList.size()-1), 2));
+        }
+
+        Double sos = calcList.stream().mapToDouble(Double::doubleValue).sum() / (data.size() -1);
+        switch (measure) {
+            case "var" -> {
+            System.out.println("VARIANCE RESULT: " + df.format(sos));
+            }
+            case "stddev" -> {
+                System.out.println("STANDARD DEVIATION RESULT: " + df.format(Math.sqrt(sos)));
+            }
         }
     }
     public static void main(String[] args) {
+        Main main = new Main();
         System.out.println("welcome to...");
         System.out.println("" +
                 "" +
@@ -127,8 +158,14 @@ public class Main {
                     System.out.println("enter numbers seperated by a space: ");
                     ArrayList<Double> userData = parseData(in.nextLine());
 
-                    goMOL(userMOL, userData);
+                    System.out.println(userMOL.toUpperCase() + "RESULT: " + df.format(goMOL(userMOL, userData)));
+                case "1.2":
+                    System.out.println("type \"stddev\" or \"var\" and press [ENTER]: ");
+                    String userMOV = in.nextLine();
+                    System.out.println("enter numbers seperated by a space: ");
+                    userData = parseData(in.nextLine());
 
+                    goMOV(userMOV, userData);
 //                default:
 //                    System.err.println("tool # not recognized.");
             }
