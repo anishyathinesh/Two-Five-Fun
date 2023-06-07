@@ -85,12 +85,19 @@ public class Main {
                         map.put(dig, 1);
                     }
                 }
-                ArrayList<Double> modes = new ArrayList<>();
-                int highest = 0;
-                for (Double key : map.keySet()) {
-                    //TODO
-
+                int max = Collections.max(map.values());
+                if (max <= 1) {
+                    System.out.println("MODE RESULT: NO MODE.");
+                } else {
+                    ArrayList<Double> modes = new ArrayList<>();
+                    for (Double key : map.keySet()) {
+                        if (map.get(key) == max) {
+                            modes.add(key);
+                        }
+                    }
+                    System.out.println("MODE RESULT: " + modes);
                 }
+
         }
     }
     public static void main(String[] args) {
@@ -122,8 +129,8 @@ public class Main {
 
                     goMOL(userMOL, userData);
 
-                default:
-                    System.err.println("tool # not recognized.");
+//                default:
+//                    System.err.println("tool # not recognized.");
             }
 
 
